@@ -12,7 +12,8 @@
    [yada.syntax :as syn]
    yada.context)
   (:import
-   (yada.context Context)))
+   (yada.context Context)
+   (java.util Date)))
 
 (s/defschema Rfc822String (s/pred #(re-matches syn/rfc822-date-time %)))
 
@@ -126,7 +127,7 @@
                (fnil conj {})
                [id (s/validate
                     SetCookie
-                    {:value "" :expires 0})])
+                    {:value "" :expires (Date. 0)})])
 
     (if-let [cookie-def (get-in ctx [:resource :cookies id])]
       (let [nm (:name cookie-def)]
@@ -134,7 +135,7 @@
                    (fnil conj {})
                    [nm (s/validate
                         SetCookie
-                        {:value "" :expires 0})]))
+                        {:value "" :expires (Date. 0)})]))
 
       (throw (ex-info (format "Failed to find declared cookie with id of '%s'" id) {})))))
 
